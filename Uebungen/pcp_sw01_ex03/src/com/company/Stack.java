@@ -3,7 +3,6 @@ package com.company;
 public class Stack {
 
     private Element top;
-    private Element bottom;
     private int size = 0;
 
     public Stack(){
@@ -12,7 +11,8 @@ public class Stack {
 
     public void push(Element e){
         if (isEmpty()){
-            this.top = this.bottom = e;
+            this.top = e;
+            e.setNext(null);
         } else {
             // NOTE: in the case head == tail, next gets
             // set on head automatically as well
@@ -30,14 +30,13 @@ public class Stack {
         if(isEmpty()) return false;
 
         final Element tmpTop = this.top;
-        if(top == bottom)
         this.top = tmpTop.getNext();
         this.size--;
         return true;
     }
 
     public void print() {
-        final Element current = top;
+        Element current = top;
 
         if(isEmpty()) {
             System.out.println("print - Stack is empty");
@@ -49,6 +48,7 @@ public class Stack {
         while(current != null) {
             System.out.print(current.getValue());
             System.out.print(", ");
+            current = current.getNext();
         }
 
         System.out.print("top Element = ");
@@ -56,16 +56,25 @@ public class Stack {
     }
 
     public boolean isEmpty(){
-       return this.bottom == null;
+       return this.top == null;
     }
 
     public int size() {
         return this.size;
     }
 
+    /**
+     * b.) Hier macht es Sinn ein clear() zu implementieren,
+     *    Auch weil dies die gleiche Operation wie im Konstruktur.
+     *
+     *    Zudem bekommt man in Java jeweils nur eine *Referenz* auf ein Stack-Objekt.
+     *    Deshalb macht die clear()-Methode Sinn:
+     *
+     *    * Um nicht immer neue Objekte allozieren zu müssen
+     *    * Um Speicher freizugeben (passiert später bei der Garbage Collection)
+     */
     public void clear() {
         this.top = null;
-        this.bottom= null;
         this.size = 0;
     }
 }
