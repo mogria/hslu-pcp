@@ -41,15 +41,25 @@ void printNumberFor(int n){
     return;
 }
 
-void printNumberRecursiveFunction_Recurse(int i, int n) {
-    if(i > n) return;
-    printf("%d ", i);
+/* void printNumberRecursiveFunction_Recurse(int i, int n) { */
+/*     if(i > n) return; */
+/*     printf("%d ", i); */
+/*  */
+/*     printNumberRecursiveFunction_Recurse(i + 1, n); */
+/* } */
+/*  */
+/* void printNumberRecursiveFunction(int n) { */
+/*     printNumberRecursiveFunction_Recurse(0, n); */
+/* } */
 
-    printNumberRecursiveFunction_Recurse(i + 1, n);
-}
+
 
 void printNumberRecursiveFunction(int n) {
-    printNumberRecursiveFunction_Recurse(0, n);
+    if(n > 0) {
+        printNumberRecursiveFunction(n - 1);
+    }
+
+    printf("%d ", n);
 }
 
 

@@ -85,12 +85,17 @@ int size(stack s) {
 //
 // Der einzige nutzen wäre explizit alle gespeicherten elemente aus dem
 // speicher löschen zu können (gebrauchte elemente werden nicht resetted auf einen "standardwert")
-void clear(stack s) {
-    s.index = STACK_EMPTY_INDEX;
-
-    for (int i = 0; i < STACK_SIZE; i++) {
-        s.stackArray[i] = STACK_DUMMY_ELEMENT;
-    }
-
-    return;
-}
+//
+//
+// Achtung: dies bringt gar nichts, weil nur die Kopie gecleared wird!!!!
+//
+//
+/* void clear(stack s) { */
+/*     s.index = STACK_EMPTY_INDEX; */
+/*  */
+/*     for (int i = 0; i < STACK_SIZE; i++) { */
+/*         s.stackArray[i] = STACK_DUMMY_ELEMENT; */
+/*     } */
+/*  */
+/*     return; */
+/* } */
