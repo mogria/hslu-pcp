@@ -40,5 +40,60 @@ father(P, C) :-
 % X = fred ;
 % X = tina.
 
-% b.)
+% b.) sibling/2
 
+sibling(X, Y) :-
+    parent(Z, X),
+    parent(Z, Y).
+
+% is correct but returns multiple trues. maybe better solution could be made with machting.
+
+
+% ?- sibling(mia, fred)
+% |    .
+% true .
+% 
+% ?- sibling(tom, jack).
+% false.
+
+
+% c.) grandmother/2
+
+grandmother(X, Y) :-
+    mother(X, Z),
+    parent(Z, Y).
+
+% ?- grandmother(X, ann)
+% |    .
+% X = mary ;
+% false.
+% 
+% ?- grandmother(liz, X).
+% X = sue ;
+% X = jim ;
+% false.
+
+% ?- grandmother(X, jim).
+% X = mary ;
+% X = liz ;
+% false.
+
+% d.) offspring/2 (ancestor, origin)
+
+offspring(C, P) :- parent(P, C).
+offspring(C, P) :-
+    parent(X, C),
+    offspring(X, P).
+
+
+% ?- offspring(ann, mary).
+% true .
+
+% ?- offspring(sue, X).
+% X = tina ;
+% X = tom ;
+% X = mary ;
+% X = mike ;
+% X = liz ;
+% X = jack ;
+% false.
