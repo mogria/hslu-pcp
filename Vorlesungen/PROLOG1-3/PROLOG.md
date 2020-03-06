@@ -1,7 +1,7 @@
 # Prolog (deklarativ logisch)
 
-Verwendete Implementierung: [SWI-Prolog](http://swi-prolog.org)
-Beispiele: [Enterpriselab PCP-public-Code](https://gitlab.enterpriselab.ch/PCP/PCP-public-Code)
+Verwendete Implementierung: SWI-Prolog, [http://swi-prolog.org](http://swi-prolog.org)  
+Beispiele: [https://gitlab.enterpriselab.ch/PCP/PCP-public-Code](https://gitlab.enterpriselab.ch/PCP/PCP-public-Code)
 
 ## Basis
 
@@ -12,7 +12,7 @@ Es wird immer geschaut anhand der gegebenen Fakten was die Lösung ist.
   * Kann abgefragt werden durch Anfragen (Queries
 * Prolog-Programme bestehen aus Fakten und Regeln, die in der aktuellen Wissensdatenbank abgelegt sind
 
-[Wissensdatenbank](./03-wissensdatenbank.png)
+![Wissensdatenbank](./03-wissensdatenbank.png)
 
 ## Basissyntax
 
@@ -26,11 +26,11 @@ Prolog-Terme sind ausschliesslich:
 * Variablen (variables)
   * z.B.: `X`, `Elephant` oder `_`
   * beginnen mit Grossbuchstaben oder einem Unterstrich (underscore)
-  * Die anonyme Variaable `_`
+  * Die anonyme Variable `_`
     * Jedes auftreten ist jeweils eine neue Variable
     * Instanziierungen von `_` werden nicht ausgegeben
 
-Zusammengesetzte Terme (compound terms)
+* Zusammengesetzte Terme (compound terms)
   * z.B.: `is_bigger(horse, X)`
   * Funktor: `is_bigger`
   * Argumente (Terme): `horse`, `X`
@@ -46,7 +46,7 @@ Zusammengesetzte Terme (compound terms)
 * Prädikate
   * wichtig eine Relation, weniger eine Funktion)
   * sind Atome und zusammengesetzte Terme
-  * Praktische Bedeuting: falls Atome: **Fakten**, z.b. `bigger`
+  * Praktische Bedeutung: falls Atome: **Fakten**, z.b. `bigger`
   * sonst Regeln, z.B. `is_bigger(X, Y):- bigger(X, Y)`
 
 * Klauseln
@@ -71,10 +71,10 @@ Eine Programm Datei kompilieren:
 
 * Klauseln (clauses) = Fakten und Regeln (sind zusammengesetzte Terme)
   * Fakten: Prädikate gefolgt von einem Punkt
-    * Fakten definieren etwas als bedingungslos warh
+    * Fakten definieren etwas als bedingungslos wahr
     * z.B. `bigger(elefant, horse)`
     * z.B. `parent(peter, mary)`
-    * Fakten sind Typischerweise Grundterme und haben keine Variabeln
+    * Fakten sind Typischerweise Grundterme und haben keine Variablen
   * Regeln (rules) bestehen aus einem head und body & sind durch :- getrennt
     * Der Kopf einer Regel ist wahr, falls alle Prädikate im Hauptteil war sind  
       ```
@@ -82,7 +82,8 @@ Eine Programm Datei kompilieren:
           father(X, Z),  % body, goal 1
           parent(Z, Y).  % body, goal 2
       ```
-    * sind eigentlich Hornklauseln: ![Hornklausel](./03-hornklausel.png)
+    * sind eigentlich Hornklauseln:  
+      ![Hornklausel](./03-hornklausel.png)
     * Prolog verwendet dafür SLD-Resolution (Selective Linear Definitive Clause Resolution)
       
 * Prozedur (procedure) = Alle Klauseln zum gleichen Prädikat
@@ -91,19 +92,19 @@ Eine Programm Datei kompilieren:
 
 ## Matching
 
-Definition: Zwei terMe matchen, wenn sie identisch sind oder wenn sie durch Erstezen von Variablen durch andere Terme identisch gemacht werden können
+**Definition:** Zwei Terme "matchen", wenn sie identisch sind oder wenn sie durch Ersetzen von Variablen durch andere Terme identisch gemacht werden können
 
 Mit dem Gleichheitsprädikat (infix) operator `=`. Alternativ kann auch als `=(a, b)` geschrieben werden.
 
-3 Regeln von matching:
+3 Regeln von Matching:
 
-* atom & atom: `tom = tom.` gleiche atomare terme machten
-* variable & atrom: `X = 'test'`, die variable X wird aufgelöst
-* zusammengesetzte Terme, auch prädikate
+* Atom & Atom: `tom = tom.` gleiche atomare Terme machten
+* Variable & Atom: `X = 'test'`, die variable X wird aufgelöst
+* Zusammengesetzte Terme, auch Prädikate
   * gleicher Funktor, gleich Stelligkeit
   * alle korrespondierenden Argumente Machten
-* Achtung ausnahme: `X = f(X).` gibt `X = f(X)` und wird nicht unendlich lang
-  ausgeführt. Dies funktioniert, weil prolog keinen "occurs check" macht.
+* *Achtung Ausnahme*: `X = f(X).` gibt `X = f(X)` und wird nicht unendlich lang
+  Ausgeführt. Dies funktioniert, weil Prolog keinen "occurs check" macht.
   * Wenn man trotzdem das verhalten von Unifikation anstatt von Machine haben will kann man
    `unify_with_occurs_check/2` verwendet werden.
 
@@ -119,7 +120,8 @@ Die Anfrage wird von links nach rechts versucht aufzulösen.
 Der Baum wird von oben bis unten abgearbeitet und versucht dies Wahr zu machen.
 Ist man an einem Blatt angekommen wird Backtracking verwendet falls keine Lösung gefunden wurde.
 Backtracking ist *Tiefensuche* (es wird erst versucht auf die Blattknoten zu kommen).
-Dies ist aber nicht sonderlich effizient (Ok^n), k = nummer an verzweigungen, n tiefe des Baumes.
+Dies ist aber nicht sonderlich effizient
+(`O(k^n)`, `k` = Nummer an Verzweigungen, `n` tiefe des Baumes).
 
 Sobald die Anfrage-Klausel leer wurde eine Lösung gefunden.
 Es kann dann zum Wurzelknoten zurückgegangen werden, um die Lösung zurückzugeben.
@@ -136,10 +138,10 @@ Falls Sie selber Suchbäume zeichnen (z.B. für Übungen oder Modulendprüfungen
 Wir wussten bis jetzt nicht wie Prolog jeweils auf die Lösungen kommen.
 Es macht daher Sinn, zwischen folgenden zwei Bedeutungsebenen von Prolog-Programmen zu unterscheiden:
 
-* die deklarative Bedeutung: **WAS**
+* Deklarative Bedeutung: **WAS**
   * Hier geht‘s ausschliesslich um die im Programm definierten Relationen, diese definieren was die Ausgabe vom Programm sein wird
   * Beschreibung des Problems
-* die prozedurale Bedeutung: **WIE**
+* Prozedurale Bedeutung: **WIE**
   * Hier geht‘s darum, wie diese Ausgabe aus den definierten Relationen abgeleitet werden kann
   * Beschreibung der Problemlösung, es wird ein Lösungsweg vorgeben
 
@@ -258,9 +260,9 @@ Warning:
 ## Rekursion
 
 ![Beweisuche mit Rekursion](./04-beweissuche-rekursion.png)
-# Prolog 3 Optimierungen
 
-## Endrekursion (tail recurson)
+
+## Optimierung: Endrekursion (tail recurson)
 
 * nur einen rekursiven Aufruf hat
 * dieser rekursive Aufruf ist der letzte Aufruf in der letzten Klausel dieser Prozedur
@@ -305,7 +307,7 @@ Lösung, tail recursion:
 
 Bei der Umwandlung braucht es typischerweise weitere argumente, sogenannte akkumulatoren.
 
-## Memoization: Optimierung durch Assertions
+## Optimierung Memoization: Optimierung durch Assertions
 
 ![Aufrufbaum](./04-call-tree-explosion.png)
 
@@ -534,3 +536,98 @@ Zerlegung einer Liste in alle Möglichen Teillisten:
     mem_2(X, L) :- conc(_, [X | _], L)
 
 Ähnlich wie Kontrollfrage 2.
+
+
+## Konkunktion, Disjunktion
+
+Konjunktion (AND) mit `,`:
+
+  X = Y, Y = Z.
+
+Disjunktion:
+
+    rich(tom).
+    nice(mary).
+    interesting(X) :-
+        rich(X);       % OR HERE
+        nice(X).
+
+Disjunktionen werden aber selten verwendet, da man auch einfach zwei Regeln verwenden kann:
+
+    interesting1(X) :- rich(X); nice(X).
+    interesting2(X) :- rich(X).
+    interesting2(X) :- nice(X).
+
+
+## Cut-Operator (`!`)
+
+
+Die Lösungsmenge kann mit dem Cut-Operator verkleinert werden, damit ein
+gewisser teil des suchbaums nicht abgesucht werden muss.
+
+Dies kann das Backtracking schneller machen und gibt uns etwas Kontrolle über
+den Backtracking Prozess.
+
+* Nimmt keine Argumente
+* Ist immer erfüllt
+* Bindet die bisherige Wahl (in Bezug auf Backtracking) innerhalb der aktuellen Klausel
+  * Das heisst es kann keine andere regel mehr gewählt werden (siehe `max2/2`).
+  * Bindet uns an die gewählte Regel
+
+Beispiel:
+
+    p(X):- b(X), !, c(X).
+
+Suchbaum ohne cut:
+
+![Suchbaum ohne cut](./04-suchbaum-ohne-cut.png)
+
+Suchbaum mit cut:
+
+![Suchbaum mit cut](./04-suchbaum-mit-cut.png)
+
+Was der Cut bewirkt
+
+* Der Cut bindet in der aktuellen Regel die Wahl aller Ziele im Hauptteil (body) links vom Cut-Operator
+* Wenn wir also bei einer Regel der Form
+
+      q :- p 1 , ... , p n , !, r 1 , ... , r n .
+
+  im Suchbaum den Cut erreichen, dann bindet uns das:
+* zu dieser spezifischen Klausel von q
+* zu den Wahlen getroffen durch p 1 bis p n
+* NICHT zu den Wahlen getroffen durch r 1 bis r n
+
+Max:
+
+    max(X, Y, X) :- X >= Y. % r1: X is the max
+    max(X, Y, Y) :- X < Y. % r2: Y is the max
+
+
+Max2 (mit cut)
+
+    max2(X, Y, Z) :- X >= Y, !, X = Z.
+    max2(_X, Y, Y).
+
+`mem(X, L)` gibt so viele Lösungen wie die Liste enthält.
+Listenzugehörigkeit mit einer Lösung (`mem_det`). 
+
+    mem_det(X, [X | _]) :- !.
+    mem_det(X, [_| Tail]) :- mem_det(X, Tail).
+
+### Green cut
+
+Cuts welche die deklarative Bedeutung *nicht verändert* (Lösungsmenge wird nicht eingeschränkt).
+Bsp. `max/2`.
+
+### Red cut
+
+Cuts welche die deklarative Bedeutung *verändert* (Lösungsmenge wird eingeschränkt).
+
+Bsp. `mem_det/2`
+
+* sind nicht vollständig deklarativ
+* sind schwer zu lesen und verstehen
+* können zu subtilen programmierfehlern führen
+
+Red Cuts nur mit Sorgfalt verwenden.
