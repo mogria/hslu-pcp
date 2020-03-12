@@ -537,6 +537,23 @@ Zerlegung einer Liste in alle Möglichen Teillisten:
 
 Ähnlich wie Kontrollfrage 2.
 
+## Eingabe und Ausgabe auf der Konsole
+
+Dafür gibt es die `read/1` und `write/1` Prädikate. Diese lesen/schreiben standardmässig von/auf stdin/stdout.
+
+Beispiel:
+
+  io_test :-
+    read(N),
+    write('You just input' ),
+    write(N).
+
+Beachte die `read/1` Funktion nimmt einen Term entgegen keine Zeichenkette! Das heisst:
+
+* Der eingegebene Term bei `read/1` muss auf der Kommandozeile beendet werden mit `.<Enter>`
+* Wenn der Punkt vergessen ist bekommt man die prompt `|: `, das heisst das der Eingegebene Term noch nicht fertig ist.
+
+
 
 ## Konkunktion, Disjunktion
 
@@ -598,13 +615,13 @@ Was der Cut bewirkt
 * zu den Wahlen getroffen durch p 1 bis p n
 * NICHT zu den Wahlen getroffen durch r 1 bis r n
 
-Max:
+max:
 
     max(X, Y, X) :- X >= Y. % r1: X is the max
     max(X, Y, Y) :- X < Y. % r2: Y is the max
 
 
-Max2 (mit cut)
+max2 (mit cut)
 
     max2(X, Y, Z) :- X >= Y, !, X = Z.
     max2(_X, Y, Y).
@@ -631,3 +648,29 @@ Bsp. `mem_det/2`
 * können zu subtilen programmierfehlern führen
 
 Red Cuts nur mit Sorgfalt verwenden.
+
+
+# Prolog 5
+
+Kontrollfragen B:
+
+Was ist die Antwort auf die Anfrage?
+
+  fib_clp(N, F)
+
+Was antwortet Prolog im CLP-R-Modus auf die Anfrage `{ X =< 4, X >= 3 + 1 }` ?
+
+  X = 4
+
+Die constraints werden aufgelöst, 4 ist die einzige Lösung.
+
+* Was auf `{ X + 1 >= 2}`?
+
+Der Range (Domain) `X >= 1`
+
+* und auf `X in 1..2 #> 2` Im CLP-FD
+
+False, `X in 1..2 #> 2`, im Falle von `X in 1..2 #>= 2`, `X = 2`
+
+
+`[X, Y] ins 1..2, all_distinct(1, Y) #= 1`
