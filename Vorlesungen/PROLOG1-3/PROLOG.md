@@ -328,6 +328,11 @@ Dafür gibt es `assert/1` und `assert/2`
 Achtung die wissensdatenbank wird von oben nach unten durchsucht.
 
 Mit `retract/1` kann ein Fakt wieder aus der Wissensdatenbank entfernt werden.
+Mit `retractall/1` können alle Fakten zu mit dem gleichen Namen entfernt werden.
+
+    retract_all(bigger(_, _))
+
+Achtung, dies entfernt auch vorherige Prädikatdefinitionen, weil diese als dynamisch markiert wurden!
 
 Mit `listing/1` können Fakten aus der Wissensdatenbank aufgelistet werden.
 
