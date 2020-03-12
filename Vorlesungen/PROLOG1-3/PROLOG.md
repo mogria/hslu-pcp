@@ -324,6 +324,12 @@ Achtung die wissensdatenbank wird von oben nach unten durchsucht.
 
 Mit `retract/1` kann ein Fakt wieder aus der Wissensdatenbank entfernt werden.
 
+Mit `listing/1` können Fakten aus der Wissensdatenbank aufgelistet werden.
+
+**Beachte:** Ein Prädikat `pred/X` muss mit `:- dynamic pred/X.` deklariert werden, dass die Assertions funktionieren. Sonst erhält man den folgenden Fehler im SWI-Prolog:
+
+    ERROR: No permission to modify static procedure `pred/X'
+
 ### Optimierung mit Assertions
 
 Um gewisse Teilresultate nicht mehrmals zu berechnen, kann dies als Fakt in der Wissensdatenbank abgelegt werden.
