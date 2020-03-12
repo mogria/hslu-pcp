@@ -320,6 +320,11 @@ Dafür gibt es `assert/1` und `assert/2`
     asserta(bigger(you, me))  % Füge fakt am anfang der Wissensdatenbank an
     % macht keinen sinn aber beides ist dann in der Datenbank!
 
+    % Füge komplexeren fall in Wissensdatenbank ein (Achtung zusätzliche klammern benötigt)
+    assertz((mother(Child, Mother) :-
+                    parent(Child, Mother),
+                    female(Mother))).
+
 Achtung die wissensdatenbank wird von oben nach unten durchsucht.
 
 Mit `retract/1` kann ein Fakt wieder aus der Wissensdatenbank entfernt werden.
