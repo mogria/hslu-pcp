@@ -1,5 +1,6 @@
 % Kreuzworträstsel
 
+% Discribe words
 word(n, e, u).
 word(t, o, p).
 word(t, o, t).
@@ -13,7 +14,7 @@ word(u, n, t, e, n).
 word(z, e, c, k, e).
 
 
-
+% Discribe fields - Which fields have a solution - word definition are the restriction
 solution(F12, F21, F22, F23, F24, F32, F34, F42, F43, F44, F45, F46) :-
     word(F12, F22, F32, F42),
     word(F21, F22, F23, F24),
