@@ -373,12 +373,12 @@ Um gewisse Teilresultate nicht mehrmals zu berechnen, kann dies als Fakt in der 
 * Eine Liste ist eine endliche Sequenz von Elementen
 * Listen können in Prolog mit Hilfe von `[ ]` (eckigen Klammern) dargestellt werden, z.B.:
 
-    ?- X = [a, b, c].
-    X = [a, b, c].
-    ?- Y = [d, e, f(X), [x, y]].
-    Y = [d, e, f(X), [x, y]].
-    ?- Z = [].
-    Z = [].
+      ?- X = [a, b, c].
+      X = [a, b, c].
+      ?- Y = [d, e, f(X), [x, y]].
+      Y = [d, e, f(X), [x, y]].
+      ?- Z = [].
+      Z = [].
 
 **Eigenschaften**:
 
@@ -410,20 +410,20 @@ Um gewisse Teilresultate nicht mehrmals zu berechnen, kann dies als Fakt in der 
 
 1. Was antwortet Prolog auf die folgende Anfrage: `X = [a | [b]].`?
 
-    ?- X = [ a | [b] ]
-    |    .
-    X = [a, b].
+      ?- X = [ a | [b] ]
+      |    .
+      X = [a, b].
 
 2. Was antwortet Prolog auf die folgende Anfrage: `[1, 2, 3] = [_ | X].`?
 
-    ?- [1, 2, 3] = [_ | X].
-    X = [2, 3].
+      ?- [1, 2, 3] = [_ | X].
+      X = [2, 3].
 
 3. Und was auf diese: `[a, b, c] = [_, X | Y].`?
 
-    ?- [a, b, c] = [_, X | Y].
-    X = b,
-    Y = [c].
+      ?- [a, b, c] = [_, X | Y].
+      X = b,
+      Y = [c].
 
 4. Warum ist es in Prolog i.A. effizienter auf das erste, als auf das letzte Element einer Liste zuzugreifen?
 
@@ -531,25 +531,25 @@ Zerlegung einer Liste in alle Möglichen Teillisten:
 
 1. Was antwortet Prolog auf die folgende Anfrage: `conc(L, [c], [a, b, c]).`?
 
-    ?- conc(L, [c], [a, b, c]).
-    L = [a, b] .
+      ?- conc(L, [c], [a, b, c]).
+      L = [a, b] .
 
 2. Was antwortet Prolog auf die Anfrage `conc(Before, [d | After], [a, b, c, d, e, f, g, h]).`?
 
-    ?- conc(Before, [d | After], [a, b, c, d, e, f, g, h]).
-    Before = [a, b, c],
-    After = [e, f, g, h] ;
-    false.
+      ?- conc(Before, [d | After], [a, b, c, d, e, f, g, h]).
+      Before = [a, b, c],
+      After = [e, f, g, h] ;
+      false.
 
 3. Und was auf `conc([a], L, [b, c]).`?
 
-  ?- conc([a], L, [b, c]).
-  false.
+      ?- conc([a], L, [b, c]).
+      false.
 
 
 4. Bonusaufgabe (anspruchsvoll): Wie lässt sich mem/2 unter Verwendung von conc/3 ausdrücken? (D.h.  als neues Prädikat der Form mem_c(X, L) :- ...conc...)
 
-    mem_2(X, L) :- conc(_, [X | _], L)
+      mem_2(X, L) :- conc(_, [X | _], L)
 
 Ähnlich wie Kontrollfrage 2.
 
@@ -666,13 +666,187 @@ Bsp. `mem_det/2`
 Red Cuts nur mit Sorgfalt verwenden.
 
 
-# Prolog 5
+## Prolog 5
 
-Kontrollfragen B:
+### Negation In Prolog: fail/0
 
-Was ist die Antwort auf die Anfrage?
+„Mary mag alle Tiere ausser Schlangen“ in Prolog:
 
-  fib_clp(N, F)
+    snake(snake).
+    animal(snake).
+    animal(horse).
+    animal(dog).
+    likes(mary X) :- snake(X), !, fail. 
+    likes(mary, X) :- animal(X).
+
+    likes_with_not(mary, X) :- animal(X), not(snake).
+
+Abfrage:
+
+    ?- likes(mary, horse).
+    true.
+    ?- likes(mary, snake).
+    false.
+
+
+Regel 1 kümmert sich hier um die Ausnahme (negation) und verwendet cut (um die zweite regel auszuschliessen) und fail um false zurückzugeben.
+
+### Verschiedenheit von X und Y: different/2
+
+(auch eine art der Negation)
+
+Implementation:
+
+    different(X, X) :- !, fail. % fail when the same
+    different(_X, _Y).          % succed when different, (use anonymous variables to avoid compiler warning)
+    
+    different_with_not(X, Y) :- not(X = Y).
+
+Abfrage:
+
+    ?- different(X, tom).
+    false.
+    ?- different(1 + 2, 3).
+    true.
+    ?- different(tom, mary).
+    true.
+
+### Das not/1-Prädikat
+
+Das not/1 Prädikat verallgemeinert die Geschichte. Es soll erfolgreich sein falls `Goal` von `not(Goal)` fehlschlägt.
+
+    not(P) :- P, !, fail.
+    not(_P) :- true.
+
+`not/1` ist die bevorzugte Notation anstatt, jeweils `!, fail.` in den eigenen Prädikaten  zu verwenden.
+
+
+Es handelt sich hierbei um eine **schwache Negation** (negation as failure). Dies ist nicht equivalent mit dem logischen Nicht-Operator, da die Lösungen im Erfolgsfall von Goal verloren gehen als `true.`
+
+#### CWA: Closed World assumption
+
+Die Annahme in Prolog, das jedes Programm **alles** Wahre über die Welt beschreibt (diese komplett modelliert) und die Welt "abgeschlossen" ist.
+Das heisst alles was nicht nicht aus dem Programm ableiten kann (z.B. auch gar nicht beschrieben wird), wird standardmässig als falsch angenommen.
+
+**Achtung:** Dies bedeutet negativ-aussagen (z.B. mittels `not`) über Sachen die Prolog nicht Bescheid weiss werden als true ausgewertet!
+
+    ?- round(ball)
+    true.
+    ?- round(earth).
+    false.                 % caused by CWA, prolog kann nicht herleiten das die erde rund ist
+    ?- not(round(earth)).  % caused by negation as failure
+    true.
+
+ (keine fakten)
+
+### Constraint-Programmierung in Prolog
+
+Arithmetische Terme in Prolog sind unpraktisch (X=4 wäre schön hier, auch `is/2` hilft nicht da es nur einseitig ist!):
+
+    ?- X + 1 = 5.
+    false.
+
+Mit Constraint Logic Programming (CLP)
+
+    use_module(library(clpr)).
+    ?- { X + 1 = 5 }.
+    X = 4.
+
+#### Temperaturumrechnung mit CLP
+
+Funktioniert beidseitig (mit `is/2` nur einseitg je nachdem auf welche Seite die argument instanziiert) oder sogar wenn man zwei variabeln braucht und keines der beiden Argumente instanziiert wird.
+
+    use_module(library(clpr)).
+    convert_clp(Celsius, Fahrenheit) :-
+    { Celsius = (Fahrenheit - 32)*5/9 }.
+
+    ?- convert_clp(35, F).
+    F = 95.0
+    ?- convert_clp(C, 95).
+    C = 35.0
+    ?- convert_clp(C, F).
+    {F=32.0+1.7999999999999998*C}.
+
+#### Fibonacci mit CLP-R
+
+    :- use_module(library(clpr)).
+    fib_clp(N, F) :- { N = 0, F = 0 }.
+    fib_clp(N, F) :- { N = 1, F = 1 }.
+    fib_clp(N, F) :- { N >= 2, F = F1+F2, N1 = N-1, N2 = N-2 },
+        fib_clp(N1, F1),
+        fib_clp(N2, F2).
+
+
+Achtung: liefert unendlich lange keine Lösung, falls das zweite Argument keine fibonacci zahl ist. Dasselbe wenn man eine Zahl abfragt aber mehr Lösungen möchte. Liefert unendlich Lösungen falls N und F nicht gegeben.
+
+#### Constraint-Satisfaction-Probleme (CSP)
+
+Sind mathemathische probleme definiert durch:
+
+1. Eine Menge von Variablen
+2. Domänen, aus welchen die Variablen Wert annehmen können.
+3. Constraints (Bedindungen) welche die Variablen erfüllen müssen.
+
+Mit CLP lassen sich CSPs recht einfach in Prolog lösen.
+
+#### CSP-Domänen
+
+Diese bestimmen den Wertebereich der Variablen.
+
+* CLP-R (`clpr` bibliothek) verwendet immer reelle zahlen
+* CLP-Q: rationale Zahlen (wird nicht weiter betrachtet)
+- CLP-FD: finite Domänen. Selber Endliche Wertebereichte für eigene Domänen eingeben.
+
+#### CLP-FD: finite Domänen.
+
+Die Domänen (Wertebereiche) programmatisch definieren. Wir verwenden nur finite Domänen bestehend aus Ganzzahlen.
+
+* `in/2`: Legt den Wertebereich einer Variablen fest
+* `ins/2`: Legt den Wertebereich einer Liste von Variablen fest
+* `all_distinct/1`: stellt sicher, dass Variablen in einer Liste paarweise unterschiedliche Werte haben
+* `label/1`: Weist allen Variablen einer Liste Werte zu (dadurch werden systematisch Lösungen für das gegebene Problem gesucht)
+
+
+**Achtung**: im CLP-FD-Modus haben alle Vergleichsoperatoren als Präfix ein `#`, also z.B. : `#=/2`, `#=</2`, `#>=/2`, usw.
+
+Zahlenrätsel:
+
+    send_more_money([S,E,N,D] + [M,O,R,E] = [M,O,N,E,Y]) :-
+    Vars = [S,E,N,D,M,O,R,Y],            % define the variables
+    Vars ins 0..9,                       % define the domain for the vars
+    all_distinct(Vars),                  % all variables must be different
+            S*1000 + E*100 + N*10 + D +
+            M*1000 + O*100 + R*10 + E #= % attention: use #=/2
+    M*10000 + O*1000 + N*100 + E*10 + Y, % addition must be ok
+    M #\= 0, S #\= 0,                    % numbers cannot start with zero
+    label(Vars).                         % assign values to the variables
+
+    ?- send_more_money(As + Bs = Cs).
+    As = [9, 5, 6, 7],
+    Bs = [1, 0, 8, 5],
+    Cs = [1, 0, 6, 5, 2] .
+
+Sudoku lösen:
+
+    :- use_module(library(clpfd)).
+    sudoku(Rows) :-
+        append(Rows, Vs), Vs ins 1..9,
+        maplist(all_distinct, Rows),
+        transpose(Rows, Columns),
+        maplist(all_distinct, Columns),
+        Rows = [A, B, C, D, E, F, G, H, I],
+        blocks(A, B, C), blocks(D, E, F), blocks(G, H, I),
+        maplist(label, Rows).
+        blocks([], [], []).
+        blocks([A, B, C|Bs1], [D, E, F|Bs2], [G, H, I|Bs3]) :-
+        all_distinct([A, B, C, D, E, F, G, H, I]),
+        blocks(Bs1, Bs2, Bs3).
+
+### Kontrollfragen B:
+
+Was ist die Antwort auf die Anfrage  `fib_clp(N, F)`?
+
+Endlose Anzahl lösungen an Fibonacci zahlen.
 
 Was antwortet Prolog im CLP-R-Modus auf die Anfrage `{ X =< 4, X >= 3 + 1 }` ?
 
@@ -690,3 +864,54 @@ False, `X in 1..2 #> 2`, im Falle von `X in 1..2 #>= 2`, `X = 2`
 
 
 `[X, Y] ins 1..2, all_distinct(1, Y) #= 1`
+
+
+## HTTP / JSON
+
+Json Include
+    ?- use_module(library(http/http_json)).
+
+HTTP client library mit http_get/3
+
+    ?- use_module(library(http/http_client)).
+    % http_get/3: URL, Reply, Options
+    ?- http_get('http://wherever.ch/pcp.txt', Reply, []).
+    Reply = 'Hallo zusammen! Dies ist eine Test-Datei fuer das PCP-
+    Modul, abgelegt unter http://wherever.ch/pcp.txt. - Prolog rockt!
+    :-) MfG, Ruedi Arnold‘.
+
+HTTP client JSON post mit http_post/4 und json/1
+
+    % http_post/4 URL, Data, Reply, Options
+    ?- http_post('http://localhost:16316/test',json(['say hi to http post']),SolutionResponse,[]).
+    SolutionResponse = 'PCPProblemProvider server up and running at
+    http://localhost:16316/, reached via HTTP POST - POSTed data:
+    ["say hi to http post" ]'.
+
+JSON Serialize with json/1
+
+    ?- use_module(library(http/http_json)).
+    json([ name='Demo term’,
+      created=json([day= @null, month='December', year=2007]),
+      confirmed= @true,
+      members=[1, 2, 3]
+    ])
+
+JSON Deserialization with json_read/2
+
+### call/2 beliebige prädikate anhand vom namen abfragen
+
+    call(:Goal, +ExtraArg, ...)
+
+    ?- call(is_bigger, horse, dog).
+    true .
+    ?- call(is_bigger, horse, X).
+    X = dog
+    X = sheep
+
+### Prädikate auf Listen anwenden: maplist/3
+
+    maplist(:Goal, ?List1, ?List2)
+
+    ?- maplist(sqrt, [4, 9, 16], X).
+    X = [2.0, 3.0, 4.0].
