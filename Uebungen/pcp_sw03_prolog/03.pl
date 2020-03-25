@@ -32,7 +32,12 @@ del([E | Tail], X, [E | NewTail]) :- % element mached nicht, beibehalten
 % L = [b, c].
 
 % 3.) c.) Implementiere mem_d/2 mit hilfe von del/3 von oben(in einer Zeile möglich), zum testen ob ein element in der liste ist.
-mem_d(E, L) :- not(del(L, E, L)).
+
+mem_d(E, L) :- del(L, E, L1), L = L1, !, fail.
+mem_d(_, _) :- true.
+
+% Alternativ mit not
+% mem_d(E, L) :- not(del(L, E, L)).
 
 % ?- mem_d(a, [a, b, c]).
 % true .
