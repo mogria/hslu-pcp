@@ -62,7 +62,7 @@ rev_acc([], Acc, Rev) :- Rev = Acc. % if we have no more to reverse then the acc
 
 rev(L, R) :- rev_acc(L, [], R).
 
-?- trace(rev_acc).
+% ?- trace(rev_acc).
 
 % ?- rev([1, 2, 3, 4, 5], R).
 %   T Call: rev_acc([1, 2, 3, 4, 5], [], _7430)

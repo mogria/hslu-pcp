@@ -70,6 +70,9 @@ solve_problem_sudoku(Problem, Solution) :-
         [_, _, _, _, _, _, _, _, _]
     ],
     Problem = [problemKey=_, sudoku=Filled],
+    % Anstatt dies kann das JSON auch direkt als Prolog Term gelesen werden
+    % Vorher müssen aber die nullen mit einem string replace
+    % ersetzt werden
     copy_pre_filled_rows(Filled, Solution),
     sudoku(Solution).
 

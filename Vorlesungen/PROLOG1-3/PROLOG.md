@@ -882,6 +882,7 @@ HTTP client library mit http_get/3
 
 HTTP client JSON post mit http_post/4 und json/1
 
+    ?- use_module(library(http/http_json)).
     % http_post/4 URL, Data, Reply, Options
     ?- http_post('http://localhost:16316/test',json(['say hi to http post']),SolutionResponse,[]).
     SolutionResponse = 'PCPProblemProvider server up and running at
@@ -897,7 +898,11 @@ JSON Serialize with json/1
       members=[1, 2, 3]
     ])
 
-JSON Deserialization with json_read/2
+JSON Deserialization with json/1
+
+    ?- use_module(library(http/json)).
+    http_get(ProblemUrl, Reply, []),
+    Reply = json(Problem).
 
 ### call/2 beliebige prädikate anhand vom namen abfragen
 

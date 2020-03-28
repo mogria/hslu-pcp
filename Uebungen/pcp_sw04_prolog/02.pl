@@ -9,6 +9,15 @@ set_difference([E | Tail], S2, D) :-
 set_difference([_ | Tail], S2, D) :-
     set_difference(Tail, S2, D).
 
+% Musterlösung ohne cut:
+%
+% set_difference([E | Tail], S2, [E | DTail]) :-
+%     \+ member(E, S2),
+%     set_difference(Tail, S2, DTail).
+% set_difference([_ | Tail], S2, D) :-
+%     member(E, S2),
+%     set_difference(Tail, S2, D).
+
 % ?- trace(set_difference).
 
 
