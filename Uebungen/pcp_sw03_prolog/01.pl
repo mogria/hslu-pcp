@@ -1,4 +1,7 @@
-% 1.) Endrekursive Fibonacci Berechnung
+% 1.) Endrekursive Fibonacci Berechnung mit Ein- und Ausgabe
+%
+
+
 fib_tr(N, F) :- fib_tr(N, 0, 1, F). % call accumulator
 fib_tr(0, A, _, A).                 % simple case
 fib_tr(N, A, B, F) :-               % general case
@@ -11,6 +14,6 @@ io_fib :-
     write('Gib eine Zahl ein: '),
     read(N),
     fib_tr(N, Result),
-    write('Die '), write(N), write('. '),
+    write('Die '), write(N), write(te), write('. '),
     write('Fibonacci-Zahl ist '),
-    write(Result).
+    write(Result), write(.).
