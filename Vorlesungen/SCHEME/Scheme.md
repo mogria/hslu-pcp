@@ -149,19 +149,22 @@ Example Constants:
 
 1. Scheme ist dynamisch typisiert. Was bedeutet das?  
   Die Typenprüfung findet während er Laufzeit statt.
-2. Wie wird der folgende Ausdruck schrittweise ausgewertet?  `(* (- 6 4) (+ 3 2))`
-  1. `(* 2 (+ 3 2))`
-  2. `(* 2 5)`
-  3. `10`
+2. Wie wird der folgende Ausdruck schrittweise ausgewertet?
+
+       (* (- 6 4) (+ 3 2))
+
+   1. `(* 2 (+ 3 2))`
+   2. `(* 2 5)`
+   3. `10`
 3. Wie sehen die Auswertungsregeln für allgemeine Formen aus?
-  * Die Reihenfolge der Auswertung ist nicht festgelegt
-  * Die Auswertung ist rekursiv
-  * Jede sub-Form muss ausgewertet werden bevor die gesamte Form ausgewertet werden kann.
+   * Die Reihenfolge der Auswertung ist nicht festgelegt
+   * Die Auswertung ist rekursiv
+   * Jede sub-Form muss ausgewertet werden bevor die gesamte Form ausgewertet werden kann.
 4. Wie sieht die Auswertungsregeln für die spezielle Form define aus?
-  * Der Zweite Ausdruck ist ein Name der gebunden wird an den Wert des dritten Ausdrucks
-  * Der Zweite Ausdruck wird nicht ausgewertet
-  * Der Dritte Ausdruck wird ausgewertet
-  * Der Rückgabewert von define ist nicht spezifiziert
+   * Der Zweite Ausdruck ist ein Name der gebunden wird an den Wert des dritten Ausdrucks
+   * Der Zweite Ausdruck wird nicht ausgewertet
+   * Der Dritte Ausdruck wird ausgewertet
+   * Der Rückgabewert von define ist nicht spezifiziert
 
 ## Name (define ...) und Funktionsdefinitionen
 
@@ -181,7 +184,7 @@ Beim Aufruf einer Funktion müssen die aktuellen Parameter in
 - Datentyp (implizit; kann nicht angegeben werden, da dynamisch typisiert)
 - Reihenfolge
 
-mit den *formalen parameter* übereinstimmen.
+Mit den *formalen Parametern* übereinstimmen.
 
 Beispiel (Berechnung einer Kreisfläche/Ringfläche):
 
@@ -199,7 +202,7 @@ Konsole, Aufruf der Funktion:
 ### Auswertungsregeln für Funktionen
 
 * *Primitive Funktionen* werden einfach ausgewertet die Anweisungen im Rumpf ausgeführt werden.
-* *Zusammengesetze oFunktionen* werden ausgeweret. Werte den Rumpf der Funktion aus. Dabei werden alle formalen Parameter mit dem aktuellen Parameterwert ersetzt.
+* *Zusammengesetze Funktionen* werden ausgewertet. Werte den Rumpf der Funktion aus. Dabei werden alle formalen Parameter mit dem aktuellen Parameterwert ersetzt.
   Beispiel Trace:
 
       (area-of-ring 5 3)
@@ -226,18 +229,18 @@ Auswertung erfolgt erst dann, wenn deren Wert benötigt wird.
 
 ## Funktionale Modellierung
 
-Ein programm besteht aus
+Ein Programm besteht aus:
 
 * Funktionen
   * Hauptfunktion: Hauptziel der Berechnung
   * Hilfsfunktionen
-* Variabeln
+* Variablen
   * Vordefiniertes `pi` oder `e`
   * eigene Definitionen
 
-Ziel ist es das Wesentliche darzustellen, während unnötige Details verborgen werden. Hierarchische struktur.
+Ziel ist es das Wesentliche darzustellen, während unnötige Details verborgen werden. Hierarchische Struktur.
 
-Top-Down verfahren/Abhänigkeits-Analyse zur Problemlösung.
+Top-Down verfahren/Abhängigkeits-Analyse zur Problemlösung.
 
 ## Aufgabe: Profit eines Kinos
 
@@ -264,45 +267,241 @@ Lösung:
 ## Kontrollfragen C
 
 1. Worauf muss man achten bei der Funktionsdefinition mit Hilfe von `define`?
-  * dyanmisch typisiert
-  * keine typen angeben
-  * aufpassen beim Aufruf mit der Reihenfolge der Parameter
+   * dynamisch typisiert
+   * keine Typen angeben
+   * Achtung: beim Aufruf mit der Reihenfolge der Parameter
 2. Gegeben sind die Funktionen:
 
-      (define (f x) (* x x))
-      (define (g x y) (+ x y))
+       (define (f x) (* x x))
+       (define (g x y) (+ x y))
 
    Wie wird `(g (g 1 3) (f 2))` ausgewertet?
-
-   1.  `(g (g 1 3) (f 2))`
-   2.  `(g (+ 1 3) (f 2))`
-   3.  `(g (+ 1 3) (* 2 2))`
-   4.  `(g 4 (* 2 2))`
-   5.  `(g 4 4)`
-   6.  `(+ 4 4)`
-   7.  `8`
-
+  
+   1. `(g (g 1 3) (f 2))`
+   2. `(g (+ 1 3) (f 2))`
+   3. `(g (+ 1 3) (* 2 2))`
+   4. `(g 4 (* 2 2))`
+   5. `(g 4 4)`
+   6. `(+ 4 4)`
+   7. `8`
+  
 3. Ändern Sie das vorhergehende Programm entsprechen den neuen Angaben und ermitteln Sie den «optimalen» Preis.
-  * Der Besitzer erreicht durch Rationalisierungsmassnahmen, dass die Kosten pro Zuschauer einfach CHF 2.00 betragen.  Ändern Sie das Programm entsprechen und ermitteln Sie den «optimalen» Preis
+   * Der Besitzer erreicht durch Rationalisierungsmassnahmen, dass die Kosten pro Zuschauer einfach CHF 2.00 betragen.  Ändern Sie das Programm entsprechen und ermitteln Sie den «optimalen» Preis
 
-        (define (profit price)
-          (- (revenue price) (cost price)))
-        (define (revenue price)
-          (* (attendees price) price))
-        (define (attendees price)
-          (+ 120 (* 15 (/ (- 8.00 price) 0.50))))
-        (define (cost price)
-          (* 2.00 (attendees price)))
+         (define (profit price)
+           (- (revenue price) (cost price)))
+         (define (revenue price)
+           (* (attendees price) price))
+         (define (attendees price)
+           (+ 120 (* 15 (/ (- 8.00 price) 0.50))))
+         (define (cost price)
+           (* 2.00 (attendees price)))
 
-  * Der Optimale Preis ist 7
+   * Der Optimale Preis ist 7
 
-        > (profit 8)
-        720.0
-        > (profit 6.5)
-        742.5
-        > (profit 7.1)
-        749.7
-        > (profit 6.9)
-        749.7
-        > (profit 7)
-        750.0
+         > (profit 8)
+         720.0
+         > (profit 6.5)
+         742.5
+         > (profit 7.1)
+         749.7
+         > (profit 6.9)
+         749.7
+         > (profit 7)
+         750.0
+
+## Staren eines Programms aus der Konsole
+
+Wenn Racket installiert ist kann mit `-f` eine Datei mitgegeben werden die ausgeführt wird.
+
+    racket -f program.rkt
+
+## Schreiben auf die Konsole
+
+`write` schreibt einen Term auf die Konsole.
+
+    write('a.)
+    a.
+    write("test")
+    "test"
+
+Es gibt auch noch `print`.
+
+`display` hingegeben gibt strings normal aus:
+
+    display("Hallo, Welt!")
+    Hallo, Welt!
+
+Die Varianten `writeln`, `println`, `displayln` geben jeweils Zustätzlich am Ende noch einen Zeilenumbruch aus.
+
+## Bedingte Ausdrücke
+
+Bedingte ausdrücke werden in Scheme oft mit `cond` umgesetzt.
+Dies ähnelt dem `switch`-Konstrukt aus anderen sprachen.
+
+`cond` nimmt beliebig viele Paare von Bedingungen und Statements (`<condition-*>` `<statement-2>` als Parameter.
+
+
+* Die Klauseln werden von oben nach unten nacheinander ausgewertet.
+* Die Erste Klausel deren Bedingung `true` ergibt wird ausgeführt
+* Es werden anschliessend keine weiteren Klauseln ausgewertet.
+* Ergibt keine Bedingung `true` wird das statement in der `else`-Klausel ausgeführt (E.g. `else` ergibt immer `true`).
+
+Syntax:
+  
+    (cond
+       (<condition-1> <statement-1>)
+       (<condition-2> <statement-2>)
+       (else <default-statement>)
+
+
+Beispiel:
+
+    (define (toll total-weight)
+      (cond
+        ((not (number? total-weight)) "Eingabe muss Zahl sein!")
+        ((<= total-weight 0) "Zahl muss größer 0 sein!")
+        ((<= total-weight 1000) 20)
+        ((<= total-weight 2000) 30)
+        ((<= total-weight 5000) 50)
+        ((<= total-weight 10000) 100)
+        (else 250)))
+
+### Selektion (if ... )
+
+Alternativ kann auch ein if/else eingesetzt werden
+
+    (if <condition> <then-expr> <else-expr>)
+
+* `<condition>`, Prädikat
+* `<then-expr>` wird ausgeführt falls `<condition>` true ist.
+* `<else-expr>` wird strikt auch benötigt und wenn `<condition>` false ist ausgeführt. 
+
+
+## Elementare Prädikate / Bool'sche Werte
+
+Ein Prädikat ist ein Ausdruck, der zu true oder false ausgewertet wird.
+
+Bool'sche Werte:
+
+- `#t` (wahr, true)
+- `#f` (falsch, false)
+
+Das Prädikat `(not )`
+
+###  Vergleichsoperatoren
+
+Es gibt folgende:
+`=`, `<`, `<=`, `>`, `>=`
+
+Beispiel:
+
+      > (< 3 1)
+      false
+      > (<= 5 5)
+      true
+      >(<= 3 4 5 5)
+      true
+      > (< 3 4 5 5)
+      false
+      ;; false, weil 5 !< 5
+
+### Logische Operatoren
+
+* werden alle von links nach rechts ausgewertet.
+* Fehler, falls keine bool'schen werte als Parameter.
+
+      > (and true (+ 3 5))
+      and: question result is not true or false: 8
+
+* AND
+
+        (and <expr1> <expr2> ... <exprN>)
+
+  * Die Auswertung stoppt, wenn der erste Ausdruck *false* zurückgibt
+
+        > (define x 0)
+        > (and (not (= x 0)) (< (/ 1 x) 1))
+        false
+        ;; Beachte: hier wid damit eine divison durch 0 verhindert
+* OR
+
+        (or <expr1> <expr2> ... <exprN>)
+
+  * Die Auswertung stoppt, wenn der erste Ausdruck *true* zurückgibt
+* Bool'sche Gleichheit
+
+        (boolean=? <expr1> <expr2>)
+
+  * `#t` falls beide ausdrücke gleich.
+    * Also beide `#f` oder beide `#t`
+
+
+### Vordefinierte Prädikatfunktionen
+
+* liefern einen Bool'schen Wert zurück
+* Funktionsname endet mit einem `?`
+* Test auf Basistypen
+  * `boolean?`, `number?`, `char?`, `string?`, `symbol?`, `vector?`, `procedure?`, `null?`, `pair?`
+* Gleichheit
+  * `eq?`, `eqv?`, `equal?`
+  * `char=?`, `string=?`, `null=?`, `boolean=?`, `symbol=?`, `string=?`
+* Zahlentests:
+  * `integer?`, `real?`, `rational?`, `complex?`
+  * `odd?`, `even?`, `negative?`, `positive?`
+  * `zero?`, `exact?`, `inexact?`
+
+### Eigene Prädkatfunktionen
+
+* Das `?` (Fragezeichen) wird benötigt am ende des `<identifier>`s.
+* Die Funktion muss einen bool'schen Wert zurückgeben
+
+    (define <identifier>? <expression>)
+
+## Symbole
+
+* Werden für einen symbolischen namen eingesetzt.
+* Können nicht verändert werden (im Gegensatz zu Strings)
+* Vergleiche sind effizient
+* Gewisse Einschränkungen bezüglich der Verfügbaren Zeichen.
+
+## Strings
+
+Werden benutzt für Textdaten.
+
+    "Dies ist ein String"
+
+* Können verändert werden
+* Vergleiche sind teuer
+
+## Struktur Datentyp
+
+Mit strukturen (oder `struct`s) kann man zusammengehörende Daten definieren, e.g. Zusammengesetzte Datenstrukturen.
+
+Syntax:
+
+    (define-struct <typename>
+      (<field1> ... <fieldN>)
+    )
+
+* `<typename>`: Bezeichnung der Struktur
+* `<field1>` - `<fieldN>`: Eigenschaften der Struktur
+
+
+Eine Struktur erzeugt implizit folgende Funktionen:
+
+    ; Konstruktur, parameter für jedes Feld
+    (make-<typename> <value1> ... <valueN>)
+
+    ; Prädikat, leifer true falls <object> mit (make-<typename> ...)
+    ; erstellt wurde.
+    (<typename?> <object>)
+
+    ; Selektor/Getter für jedes Feld
+    (<typename>-<field> <object>)
+
+Beispiel:
+
+    (define-struct member (lastname firstname number))
+    (define-struct point (x y z))
+
