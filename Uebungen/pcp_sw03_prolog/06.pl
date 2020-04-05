@@ -11,14 +11,15 @@
 % das so?
 
 % Implementation von mem/2
-mem(X, [X | _]). % element is at the beginning of the list, return true
-mem(X, [_ | Tail]) :- mem(X, Tail).  % else search the rest of the list
+mem(X, [X | _]).                        % element is at the beginning of the list, return true
+mem(X, [_ | Tail]) :- mem(X, Tail).     % else search the rest of the list
 
-% Folgender befehl auf der Konsole liefert nur eine Lösung:
+% Folgender Befehl auf der Konsole liefert nur eine Lösung:
 ?- L = [_, _, _], mem(a, L), mem(b, L), mem(c, L), !.
 
 % => Wieso ist dies hier ein Red cut?
 %
-% A: Weil nicht nur mittels eines Cut's (wie bei einem green-cut) die Lösungssuche
-% verschnellert wurde, sondern auch gültige Lösungen mit hier wegen cut-operator
-% nicht gefunden werden konnten.
+% A: 
+% Weil es die deklarative Bedeutung von dem Prädikat verändert. - Es werden gültige Lösungen
+% abgeschnitten und nicht verwendet.
+
