@@ -1,26 +1,39 @@
 % 3.) Listen
-add(X, L, [ X | L ]).
+add(X, L, [ X | L ]). % Ein Element X am Anfang einer Liste hinzufügren (Explizites Prädikat)
 
-% 3.) a.) add_tail/3 welches ein element an der ende der liste anfügt
-add_tail(X, [], [X]).
-add_tail(X, [ E | Tail ], [ E | NewTail ]) :-
-    add_tail(X, Tail, NewTail).
+% 3.) a.) add_tail/3, dass ein Element am  Ende der liste anfügt
+add_tail(X, [], [X]).                           % Argument in the Knowledge base - what shoul happen if the list is empty
+add_tail(X, [ E | Tail ], [ E | NewTail ]) :-   % Regeldefinition
+    add_tail(X, Tail, NewTail).                 % Rekursiver Aufruf der Liste damit sie aufgesplitet wird in ihre Einzelteile -
 
 % ?- add_tail(x, [a, b, c], L).
 % L = [a, b, c, x].
 
+%[trace]  ?- add_tail(x, [a, b], L1).
+%  Call: (8) add_tail(x, [a, b], _8998) ? creep
+%  Call: (9) add_tail(x, [b], _9220) ? creep
+%  Call: (10) add_tail(x, [], _9226) ? creep
+%  Exit: (10) add_tail(x, [], [x]) ? creep
+%  Exit: (9) add_tail(x, [b], [b, x]) ? creep
+%  Exit: (8) add_tail(x, [a, b], [a, b, x]) ? creep
+%L1 = [a, b, x]
+
+
 
 % 3.) b.) del/3 welches ein element aus einer liste entfernt, sollte sich gleich verhalten wie eingebauten delete/3
 %
-del([], _, []). % leere listen, oder wenn X nicht enthalten
-del([X | Tail], X, L1) :- % element matched, löschen
-    !, del(Tail, X, L1). % cut here, because if the elements matched, the next rule which keeps the element should
-                         % not be executed
-del([E | Tail], X, [E | NewTail]) :- % element mached nicht, beibehalten
+del([], _, []).                         % leere Listen, oder wenn X nicht enthalten
+del([X | Tail], X, L1) :-               % element matched, dann löschen
+    !, del(Tail, X, L1).                % cut here, because if the elements matches, the next rule which keeps the element should
+                                        % not be executed
+del([E | Tail], X, [E | NewTail]) :-    % element matched nicht, beibehalten
     del(Tail, X, NewTail).
-% del([ X | Tail ], X, Tail) :- % element in der liste wurde gefunden, also entfernen
+
+
+
+% del([ X | Tail ], X, Tail) :-         % element in der liste wurde gefunden, also entfernen
 % !, del(Tail, X, Tail).
-% del([ _ | Tail ], X, L1) :- % element wurde nicht in der liste gefunden, also beibehalten
+% del([ _ | Tail ], X, L1) :-           % element wurde nicht in der liste gefunden, also beibehalten
 % del(Tail, X, L1). 
 
 % ?- del([a, b, c], c, L).
