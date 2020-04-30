@@ -85,10 +85,10 @@ Ein Programm:
 * Die in Scheme eingebauten mathematischen Funktionen werden PRIM-OPS (Primitive operations) genannt.
 * integer operations:
   * `+`, `-`, `*`, `/`
-  * `quotient` (Ganzzahldivision), `remainder`, `modulo` (Rest)
+  * `quotient` (Ganzzahldivision), `(remainder `, `modulo` (Rest)
   * `expt`, `lcm`
   * `abs`, `max`, `min`
-  * `numerator` (Zähler), `denominator` (Nenner), `gcd`
+  * `(make-rational numerator denominator)` Rationale Zahl, `numerator` (Zähler), `denominator` (Nenner), `gcd`
 * real and complex operations:
   * `exp`, `sin`, `cos`, `tan`, `expt`, `log`, `sqr`, `sqrt`
 
@@ -406,6 +406,10 @@ Beispiel:
       false
       ;; false, weil 5 !< 5
 
+Es gibt diese auch für die jeweiligen Datentypen. Z.B. String:
+
+    > (string>? "ba" "ab")
+
 ### Logische Operatoren
 
 * werden alle von links nach rechts ausgewertet.
@@ -413,6 +417,10 @@ Beispiel:
 
       > (and true (+ 3 5))
       and: question result is not true or false: 8
+* NOT
+
+        (not t) ; => #f
+        (not f) ; => #t
 
 * AND
 
@@ -444,7 +452,9 @@ Beispiel:
 * Test auf Basistypen
   * `boolean?`, `number?`, `char?`, `string?`, `symbol?`, `vector?`, `procedure?`, `null?`, `pair?`
 * Gleichheit
-  * `eq?`, `eqv?`, `equal?`
+  * `eq?`, `(eq? 1 '1) => #t`
+  * `eqv?`,
+  * `equal?`
   * `char=?`, `string=?`, `null=?`, `boolean=?`, `symbol=?`, `string=?`
 * Zahlentests:
   * `integer?`, `real?`, `rational?`, `complex?`
@@ -473,6 +483,10 @@ Werden benutzt für Textdaten.
 
 * Können verändert werden
 * Vergleiche sind teuer
+
+## Characters
+
+`\#A`, `#\space`
 
 ## Struktur Datentyp
 
@@ -505,3 +519,197 @@ Beispiel:
     (define-struct member (lastname firstname number))
     (define-struct point (x y z))
 
+Die Datentypen der Struktur können nicht festgelegt werden.
+
+## Rekursive Datentypen / Listen
+
+Die Liste ist eine rekursive Datenstruktur. Eine list ist entweder ...
+
+* leer oder
+* besteht aus
+  * aus einem ersten element `(first <first>)`
+  * und einem rest, was wiederum eine Liste ist `(rest <list>)`
+
+`(first )` und `(rest )` benötigen eine liste als erstes argument!
+
+`empty` ist eine leere Liste.
+
+Elemente einer liste müssen nicht vom gleichen Datentyp sein (da lisp ja dynamisch typisiert ist)
+
+Listen erzeugen mit `(cons ...)` (braucht immer 2 parameter, `empty` kann als leere liste verwendet werden)
+
+    > (cons "Adam" (cons "Eve" empty))
+    '("Adam" "Eve")
+
+
+Listen erzeugen mit `(list ...)`
+
+    > (list 1 2 3)
+    '(1 2 2)
+    > (list 1 (list 2 1) 3)
+    '(1 '(2 1) '3)
+
+Quote Konstruktur:
+
+    '(1 2 3)
+    ; dasselbe wie (list 1 2 3)
+    '(a b c)
+    ; dasselbe wie (list 'a 'b 'c)
+    '((1 2) (3 4))
+    ; dasselbe wie (list (list 1 2) (list 3 4))
+
+Checken ob etwas eine list ist ist mit ist möglich mit `(cons? list)`
+
+    > (cons? empty)
+    #f
+    > (cons? '())
+    #f
+    > (cons? (list 1))
+    #t
+
+* `(empty? <list>)` hingegen prüft ob es eine leere liste ist.
+* `(list? <object>)` prüft ob es sich überhaupt um eine liste handelt
+
+### Listenfunktionen
+
+* `(reverse list)` kehrt eine liste um
+* `(length list)` gibt die länge einer liste zurück
+* `(append list1 list2 ...)` hängt mehrere listen aneinander
+
+### Strukturierte Listen
+
+Elemente einer Liste können von unterschiedlichen datentypen sein, auch listen und strukturen:
+
+    ; Sequentielle Listen gleicher Länge
+    (define phone-book
+       (list
+          (list "Meier" 2051)
+          (list "Müller" 3352)))
+
+    ; Strukturen vom gleichen Typ
+    (define-struct person (name number))
+    (define another-phone-book
+       (list
+          (make-person "Meier" 2051)
+          (make-person "Müller" 3352)))
+
+## Rekursive funktionen auf listen
+
+    (define (sum a-list)
+      (cond ((empty? a-list) 0)
+        (else
+          (+
+            (first a-list)
+            (sum (rest a-list))
+          )
+        )
+      )
+    )
+
+## Wohldefinierte Rekursion
+
+Wohldefiniiert heisst, das die Auswertung der Funktion terminiert.
+
+E.g. diese funktion ist **nicht wohldefiniert**: `(define (f a-bool) (f (not a-bool)))`
+
+Strukturelle Rekursion (e.g. eine Reukursion die der Struktur der Daten folgt) ist stets wohldefiniert, da die Schachtelungstiefe der Daten in jedem rekursivem Aufruf abnimmt.
+
+## Sortieren durch einfügen Zahlen (Insertion-Sort)
+
+    ;; wird benötigt fur diesen algo
+    (define (insert item a-list)
+      (cond 
+        ((empty? a-list) (list item))
+        ((<= item (first a-list)) (cons item a-list))
+        (else (cons (first a-list) (insert item (rest a-list))))
+        ))
+
+    ; Sortieren durch Einfügen 
+    (define (sort-by-insert num-list)
+      (cond
+        ((empty? num-list) empty)
+        (else (insert (first num-list)
+                      (sort-by-insert (rest num-list))))
+        ))
+
+    ; Demo
+    (sort-by-insert '(12 54 32 21))
+    ;(define a-list (list 22 11 27 33 6 35 45 11 47 17 8 23))
+    ;(sort-by-insert a-list)o
+
+
+## Typen von Rekursionen
+
+
+### Strukturelle Rekursion
+
+Bisher haben wir nur strukturelle rekursion verwendet.
+
+* Die Eingabedaten wurden in ihre direkten strukturellen Komponenten zerlegt.
+* Die rekursive Funktion wurde so oft aufgerufen, wie die Anzahl der Elemente der Eingabedaten (Liste) betrug.
+* Das Funktionsschema (ohne Spezialfall leere Liste) ist
+  * behandle erstes Element der Eingabedaten,
+  * mache-etwas-mit dem Rest der Eingabedaten.
+
+Allerdings:
+
+* nicht alle probleme lassen sich so lösen
+* ist auch nicht immer die beste Lösung
+
+      ; Grenzen der strukturellen Rekursion
+      ; Finde das Maximum in einer Liste von Zahlen
+      (define (list-max a-list)
+        (cond
+          [(empty? (rest a-list)) (first a-list)]
+          [else (cond
+            [(> (first a-list) (list-max (rest a-list)))  
+                (first a-list)]
+            [else (list-max (rest a-list))])]
+      ))
+
+      ; Demo
+      (list-max (list 42))
+      (list-max (list 2 3 6 5 9 1))
+      ;(list-max (list 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25))
+
+### Akkumulative Rekursion
+
+Beispielsweise so:
+
+  (define (f n))
+    (local (
+      (define (f_acc count n result)
+        (cond
+          [(= count n) result]
+          [else f_acc (+ count 1 n) n (+ result count)]
+        )
+      )
+    ) (f_acc 0 n 0))
+
+
+Nur 1 rekursiver funktionsaufruf und das am Ende der Funktion!
+
+### Generative Rekursion
+
+## Funktionen höherer Ordnung
+
+
+* Funktionen als Parameter
+* Datentyp Funktionen
+
+### Vordefinierte Funktionein
+
+
+`filter`
+`map`
+`apply`
+
+
+### `(let` and `(let* )`
+
+* ``(let *)`` -> wie let in nix
+* ``(let)`` man kann andere Defintionen nicht referenzieren (oder sonst wird das outer scope genommen!)
+
+### Mehrere statements nacheinander `begin`
+
+    (begin (a ... ) (b ...))
