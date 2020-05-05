@@ -63,6 +63,10 @@ grandmother(X, Y) :-
     mother(X, Z),
     parent(Z, Y).
 
+grandfather(X, Y) :-
+    father(X, Z),
+    parent(Z, Y).
+
 % ?- grandmother(X, ann)
 % |    .
 % X = mary ;
