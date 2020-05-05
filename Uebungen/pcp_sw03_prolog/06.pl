@@ -19,7 +19,8 @@ mem(X, [_ | Tail]) :- mem(X, Tail).     % else search the rest of the list
 
 % => Wieso ist dies hier ein Red cut?
 %
-% A: 
-% Weil es die deklarative Bedeutung von dem Prädikat verändert. - Es werden gültige Lösungen
+% A:
+% Gemäss Theorie: 
+% Weil es die deklarative Bedeutung von dem Prädikat verändert. - Es werden dadurch gültige Lösungen
 % abgeschnitten und nicht verwendet.
 

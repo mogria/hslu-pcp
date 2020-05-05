@@ -29,7 +29,7 @@ d(4).
 %  T Redo: p(1)
 %  T Call: b(_6882)
 %  T Exit: b(2)
-%  T Call: c(2) % no cut here!
+%  T Call: c(2)                 % no cut here!
 %  T Exit: c(2)
 %  T Exit: p(2)
 % X = 2 ;
@@ -57,7 +57,7 @@ d(4).
 %  T Redo: p(1)
 %  T Call: b(_6882)
 %  T Exit: b(2)
-%  T Call: c(2) % was cut here, so only 1 more solution from this branch on
+%  T Call: c(2)             % was cut here, so only 1 more solution from this branch on
 %  T Exit: c(2)
 %  T Exit: p(2)
 % X = 2.

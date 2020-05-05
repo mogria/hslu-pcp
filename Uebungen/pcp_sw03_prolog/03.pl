@@ -2,7 +2,7 @@
 add(X, L, [ X | L ]). % Ein Element X am Anfang einer Liste hinzufügren (Explizites Prädikat)
 
 % 3.) a.) add_tail/3, dass ein Element am  Ende der liste anfügt
-add_tail(X, [], [X]).                           % Argument in the Knowledge base - what shoul happen if the list is empty
+add_tail(X, [], [X]).                           % Argument in the Knowledge base - what should happen if the list is empty
 add_tail(X, [ E | Tail ], [ E | NewTail ]) :-   % Regeldefinition
     add_tail(X, Tail, NewTail).                 % Rekursiver Aufruf der Liste damit sie aufgesplitet wird in ihre Einzelteile -
 
@@ -46,8 +46,8 @@ del([E | Tail], X, [E | NewTail]) :-    % element matched nicht, beibehalten
 
 % 3.) c.) Implementiere mem_d/2 mit hilfe von del/3 von oben(in einer Zeile möglich), zum testen ob ein element in der liste ist.
 
-mem_d(E, L) :- del(L, E, L1), L = L1, !, fail.
-mem_d(_, _) :- true.
+mem_d(E, L) :- del(L, E, L1). % Del wird nur True wenn was deelten kann
+
 
 % Alternativ mit not
 % mem_d(E, L) :- not(del(L, E, L)).
@@ -60,11 +60,10 @@ mem_d(_, _) :- true.
 
 % 3.) d.) Implementieren Sie ein Prädikat rev_acc(L, A, R) zum umdrehen einer liste mit einem akkumulator
 rev_acc([], [], []).
-rev_acc([Head | Tail], [], R) :- % if the accumulator is empty let's start accumulating, we only have one solution from here on.
-    !, rev_acc(Tail, [Head], R).
-rev_acc([Head | Tail], A, R) :-
-    rev_acc(Tail, [Head | A], R).
-rev_acc([], Acc, Rev) :- Rev = Acc. % if we have no more to reverse then the accumulator is the reverse of the list
+rev_acc([Head | Tail], A, R) :-     % A = Akkumulator --> Wird benötigt um die Liste zu wenden. Zwischespeicher
+    rev_acc(Tail, [Head | A], R).   % Folgeaufruf mit Tail an erster Stelle  (Tail (Teilliste),[Head (Teilliste) | [Leere Liste] ], R (Variable)
+rev_acc([], Acc, Acc).
+                          % if we have no more to reverse then the accumulator is the reverse of the list
 
 
 % ?- rev_acc([a, b, c, d], [], L).
@@ -73,7 +72,7 @@ rev_acc([], Acc, Rev) :- Rev = Acc. % if we have no more to reverse then the acc
 
 % 3.) e.) rev/2 implementieren mithilfe von rev_acc/3
 
-rev(L, R) :- rev_acc(L, [], R).
+rev(L, R) :- rev_acc(L, [], R).                     % Verbergen des Akkumulators - Er soll nicht mitgegeben werden
 
 % ?- trace(rev_acc).
 
